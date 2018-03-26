@@ -2,7 +2,7 @@
 #include <chrono>
 #include <list>
 
-// wrapper around std::chrono
+// wrapper around time stuff
 class Clock
 {
 public:
