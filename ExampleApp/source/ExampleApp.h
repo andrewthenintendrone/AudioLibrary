@@ -1,6 +1,8 @@
 #pragma once
 #include <SFML\Graphics.hpp>
 #include <AudioManager.h>
+#include <TimingData.h>
+#include <Clock.h>
 #include <string>
 #include <list>
 
@@ -24,4 +26,12 @@ private:
 	sf::RenderWindow* m_window;
 
 	std::list<sf::Drawable*> m_drawables;
+
+	TimingData m_timingData;
+	Clock m_clock;
+
+	int currentEvent = 0;
+	bool record = false;
+
+	float hitTimer = 0;
 };
