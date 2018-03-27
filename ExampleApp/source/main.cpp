@@ -5,31 +5,29 @@ const int windowHeight = 720;
 
 int main(int argc, char* argv[])
 {
-	ExampleApp exampleApp(windowWidth, windowHeight, "OSS!");
+	ExampleApp app(windowWidth, windowHeight, "Audio Library Example");
 
-	sf::CircleShape* ball = new sf::CircleShape(200);
-	ball->setFillColor(sf::Color(233, 132, 178));
-	ball->setOrigin(200, 200);
-	ball->setPosition(windowWidth / 2, windowHeight / 2);
-	ball->setOutlineColor(sf::Color::White);
-	ball->setOutlineThickness(10);
-	exampleApp.addDrawable(ball);
+	GameObject drum("textures/drum.png");
+	drum.m_keycode = (sf::Keyboard::RShift);
+	drum.m_soundEffect = ("audio/drum.wav");
 
-	sf::Font font;
-	font.loadFromFile("fonts/Roboto-Regular.ttf");
+	GameObject cymbal("textures/cymbal.png");
+	cymbal.m_keycode = (sf::Keyboard::LShift);
+	cymbal.m_soundEffect = ("audio/cymbal.wav");
 
-	sf::Text text;
-	text.setFont(font);
-	text.setCharacterSize(100);
-	text.setString("OSS!");
-	//center text
-	sf::FloatRect textRect = text.getLocalBounds();
-	text.setOrigin(textRect.left + textRect.width / 2.0f,
-		textRect.top + textRect.height / 2.0f);
-	text.setPosition(windowWidth / 2, windowHeight / 2);
-	exampleApp.addDrawable(&text);
+	GameObject saxophone("textures/saxophone.png");
+	saxophone.m_keycode = (sf::Keyboard::Space);
+	saxophone.m_soundEffect = ("audio/saxophone.wav");
 
-	exampleApp.run();
+	drum.setPosition(sf::Vector2f(windowWidth * 0.75f, windowHeight / 2.0f));
+	cymbal.setPosition(sf::Vector2f(windowWidth * 0.25f, windowHeight / 2.0f));
+	saxophone.setPosition(sf::Vector2f(windowWidth * 0.5f, windowHeight / 2.0f));
+
+	app.addGameObject(&drum);
+	app.addGameObject(&cymbal);
+	app.addGameObject(&saxophone);
+
+	app.run();
 
 	return 0;
 }

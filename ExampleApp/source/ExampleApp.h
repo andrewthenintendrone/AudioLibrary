@@ -5,6 +5,7 @@
 #include <Clock.h>
 #include <string>
 #include <list>
+#include "GameObject.h"
 
 class ExampleApp
 {
@@ -15,8 +16,8 @@ public:
 
 	void run();
 
-	void addDrawable(sf::Drawable* drawable);
-	void removeDrawable(sf::Drawable* drawable);
+	void addGameObject(GameObject* gameobject);
+	void removeGameObject(GameObject* gameobject);
 
 private:
 
@@ -25,13 +26,11 @@ private:
 
 	sf::RenderWindow* m_window;
 
-	std::list<sf::Drawable*> m_drawables;
+	std::list<GameObject*> m_gameObjects;
 
 	TimingData m_timingData;
 	Clock m_clock;
 
 	int currentEvent = 0;
 	bool record = false;
-
-	float hitTimer = 0;
 };
