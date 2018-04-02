@@ -33,4 +33,6 @@ private:
 
 	int currentEvent = 0;
 	bool record = false;
+
+	std::string m_timingFile = "./timing.bin";
 };

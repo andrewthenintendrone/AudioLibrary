@@ -6,7 +6,7 @@ ExampleApp::ExampleApp(const int width, const int height, const std::string& tit
 
 	if (!record)
 	{
-		m_timingData.readEvents("C:/Users/s170837/Desktop/timing.bin");
+		m_timingData.readEvents(m_timingFile);
 	}
 }
 
@@ -34,8 +34,17 @@ void ExampleApp::removeGameObject(GameObject* gameobject)
 
 void ExampleApp::run()
 {
+	// preload audio assets
+	for (auto iter = m_gameObjects.begin(); iter != m_gameObjects.end(); iter ++)
+	{
+		AudioManager::getInstance().preloadAudio((*iter)->m_soundEffect);
+	}
+
 	// play audio
-	//AudioManager::getInstance().playStream("audio/music4.mp3");
+	AudioManager::getInstance().playStream("audio/music.mp3");
+
+	// reset clock
+	m_clock = Clock();
 
 	while (m_window->isOpen())
 	{
@@ -57,7 +66,7 @@ void ExampleApp::update()
 		{
 			if (record)
 			{
-				m_timingData.writeEvents("C:/Users/s170837/Desktop/timing.bin");
+				m_timingData.writeEvents(m_timingFile);
 			}
 			m_window->close();
 		}
@@ -67,7 +76,7 @@ void ExampleApp::update()
 			{
 				if (record)
 				{
-					m_timingData.writeEvents("C:/Users/s170837/Desktop/timing.bin");
+					m_timingData.writeEvents(m_timingFile);
 				}
 				m_window->close();
 			}

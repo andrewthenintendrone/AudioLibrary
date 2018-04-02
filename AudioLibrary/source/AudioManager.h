@@ -11,6 +11,8 @@ public:
 
 	void update();
 
+	bool preloadAudio(const std::string& filename);
+
 	bool playAudio(const std::string& filename);
 	bool playStream(const std::string& filename);
 

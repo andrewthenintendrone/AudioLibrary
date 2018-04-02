@@ -14,6 +14,35 @@ void AudioManager::update()
 	m_soundSystem->update();
 }
 
+bool AudioManager::preloadAudio(const std::string& filename)
+{
+	FMOD_RESULT result;
+
+	for (auto it = m_audio.begin(); it != m_audio.end(); it++)
+	{
+		// audio has already been loaded
+		if (it->second == filename)
+		{
+			return true;
+		}
+	}
+
+	// new audio file load it
+	FMOD::Sound* sound;
+
+	result = m_soundSystem->createSound(filename.c_str(), FMOD_CREATESAMPLE | FMOD_2D, 0, &sound);
+
+	if (result != FMOD_OK)
+	{
+		std::cout << "FMOD Error: " << FMOD_ErrorString(result) << std::endl;
+		return false;
+	}
+
+	m_audio.push_back(std::pair<FMOD::Sound*, std::string>(sound, filename));
+
+	return true;
+}
+
 bool AudioManager::playAudio(const std::string& filename)
 {
 	FMOD_RESULT result;
