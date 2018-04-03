@@ -152,13 +152,17 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="source\CircleGameObject.cpp" />
     <ClCompile Include="source\ExampleApp.cpp" />
     <ClCompile Include="source\GameObject.cpp" />
     <ClCompile Include="source\main.cpp" />
+    <ClCompile Include="source\SpriteGameObject.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="source\CircleGameObject.h" />
     <ClInclude Include="source\ExampleApp.h" />
     <ClInclude Include="source\GameObject.h" />
+    <ClInclude Include="source\SpriteGameObject.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

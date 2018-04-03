@@ -1,13 +1,18 @@
 #include "ExampleApp.h"
+#include <iostream>
 
 ExampleApp::ExampleApp(const int width, const int height, const std::string& title)
 {
 	m_window = new sf::RenderWindow(sf::VideoMode(width, height), title);
 
-	if (!record)
+	if (record)
 	{
-		//m_timingData.readEvents(m_timingFile);
-		m_timingData.averageEvents(m_timingFile1, m_timingFile2);
+		m_timingData.addRepeatingEvent(sf::Keyboard::Space, 0, 368, 300);
+	}
+
+	else
+	{
+		m_timingData.readEvents(m_timingFile);
 	}
 }
 
@@ -42,7 +47,7 @@ void ExampleApp::run()
 	}
 
 	// play audio
-	AudioManager::getInstance().playStream("audio/music2.mp3");
+	AudioManager::getInstance().playStream("audio/lockstep.mp3");
 
 	// reset clock
 	m_clock = Clock();
@@ -67,7 +72,7 @@ void ExampleApp::update()
 		{
 			if (record)
 			{
-				m_timingData.writeEvents(m_timingFile2, false);
+				m_timingData.writeEvents(m_timingFile, false);
 			}
 			m_window->close();
 		}
@@ -77,7 +82,7 @@ void ExampleApp::update()
 			{
 				if (record)
 				{
-					m_timingData.writeEvents(m_timingFile2, false);
+					m_timingData.writeEvents(m_timingFile, false);
 				}
 				m_window->close();
 			}
@@ -85,7 +90,7 @@ void ExampleApp::update()
 			{
 				for (auto iter = m_gameObjects.begin(); iter != m_gameObjects.end(); iter++)
 				{
-					if ((char)event.key.code == (*iter)->getKeyCode() &&record)
+					if ((char)event.key.code == (*iter)->m_keycode && record)
 					{
 						(*iter)->m_hitTimer = 0.25f;
 						m_timingData.addEvent((char)event.key.code, m_clock.getTimeMilliseconds());
@@ -106,11 +111,14 @@ void ExampleApp::update()
 	{
 		if (currentEvent < m_timingData.getNumEvents())
 		{
-			if (m_clock.getTimeMilliseconds() >= m_timingData.getEvent(currentEvent).TimeStamp)
+			float ratio = m_timingData.getRatioToNextEvent(currentEvent, m_clock.getTimeMilliseconds());
+			m_gameObjects.front()->setScale(ratio, ratio);
+
+			if (m_clock.getTimeMilliseconds() > m_timingData.getEvent(currentEvent).TimeStamp)
 			{
 				for (auto iter = m_gameObjects.begin(); iter != m_gameObjects.end(); iter++)
 				{
-					if (m_timingData.getEvent(currentEvent).KeyCode == (*iter)->getKeyCode())
+					if (m_timingData.getEvent(currentEvent).KeyCode == (*iter)->m_keycode)
 					{
 						(*iter)->playSound();
 						(*iter)->m_hitTimer = 0.25f;

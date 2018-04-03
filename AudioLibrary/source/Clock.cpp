@@ -1,5 +1,4 @@
 #include "Clock.h"
-#include <iostream>
 #include <fstream>
 #include "AudioManager.h"
 
@@ -36,7 +35,6 @@ void Clock::update()
 
 float Clock::getDeltaTime()
 {
-	std::cout << deltaTime << std::endl;
 	return deltaTime;
 }
 

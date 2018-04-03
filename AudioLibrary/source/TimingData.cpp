@@ -5,7 +5,7 @@
 
 TimingData::TimingData()
 {
-
+	
 }
 
 void TimingData::addEvent(const InputEvent& event)
@@ -39,10 +39,8 @@ void TimingData::writeEvents(const std::string& filename, bool append)
 
 	for (auto iter = m_events.begin(); iter != m_events.end(); iter++)
 	{
-		InputEvent currentEvent = *iter;
-
-		file.write(reinterpret_cast<char*>(&currentEvent.KeyCode), sizeof(char));
-		file.write(reinterpret_cast<char*>(&currentEvent.TimeStamp), sizeof(int64_t));
+		file.write(reinterpret_cast<char*>(&iter->KeyCode), sizeof(char));
+		file.write(reinterpret_cast<char*>(&iter->TimeStamp), sizeof(int64_t));
 	}
 
 	file.close();
@@ -50,7 +48,7 @@ void TimingData::writeEvents(const std::string& filename, bool append)
 
 void TimingData::readEvents(const std::string& filename)
 {
-	std::ifstream file(filename, std::ios::_Nocreate | std::ios::binary);
+	std::ifstream file(filename, std::ios::_Nocreate | std::ios::binary | std::ios::ate);
 
 	if (!file.is_open())
 	{
@@ -58,7 +56,11 @@ void TimingData::readEvents(const std::string& filename)
 		return;
 	}
 
-	while(!file.eof())
+	int numEvents = file.tellg() / (sizeof(char) + sizeof(int64_t));
+
+	file.seekg(0, std::ios::beg);
+
+	for(int i = 0; i < numEvents; i++)
 	{
 		InputEvent currentEvent;
 
@@ -72,6 +74,49 @@ void TimingData::readEvents(const std::string& filename)
 
 	// order the read events
 	orderEvents();
+}
+
+// add an event that repeats every 
+void TimingData::addRepeatingEvent(const char keyCode, const int64_t timeStamp, const int time, const int count)
+{
+	InputEvent currentEvent;
+	currentEvent.KeyCode = keyCode;
+	currentEvent.TimeStamp = timeStamp;
+
+	for (int i = 0; i < count; i++)
+	{
+		m_events.push_back(currentEvent);
+		currentEvent.TimeStamp += time;
+	}
+
+	orderEvents();
+}
+
+float TimingData::getRatioToNextEvent(int number, int64_t currentTime)
+{
+	InputEvent currentEvent;
+	InputEvent nextEvent;
+
+	if (number == 0)
+	{
+		currentEvent = InputEvent{ m_events.front().KeyCode, 0 };
+		nextEvent = m_events.front();
+	}
+	else
+	{
+		currentEvent = getEvent(number - 1);
+		nextEvent = getEvent(number);
+	}
+
+	int64_t timeSinceEvent = currentTime - currentEvent.TimeStamp;
+	int64_t timeBetweenEvents = nextEvent.TimeStamp - currentEvent.TimeStamp;
+
+	if (timeBetweenEvents == 0)
+	{
+		return 1.0f;
+	}
+
+	return (float)(timeSinceEvent) / (float)(timeBetweenEvents);
 }
 
 // averages the timings of 2 files
@@ -157,10 +202,8 @@ InputEvent TimingData::getEvent(int number)
 	{
 		return *std::next(m_events.begin(), number);
 	}
-	else
-	{
-		return *m_events.end();
-	}
+
+	return m_events.back();
 }
 
 size_t TimingData::getNumEvents()

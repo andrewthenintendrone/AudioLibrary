@@ -7,31 +7,12 @@ int main(int argc, char* argv[])
 {
 	ExampleApp app(windowWidth, windowHeight, "Audio Library Example");
 
-	GameObject drum("textures/drum.png");
-	drum.m_keycode = sf::Keyboard::RShift;
-	drum.m_soundEffect = "audio/drum.wav";
+	CircleGameObject object(200, sf::Color(232, 102, 160, 255));
+	object.m_keycode = sf::Keyboard::Space;
+	object.m_soundEffect = "audio/drum.wav";
+	object.setPosition(windowWidth / 2, windowHeight / 2);
 
-	GameObject cymbal("textures/cymbal.png");
-	cymbal.m_keycode = sf::Keyboard::LShift;
-	cymbal.m_soundEffect = "audio/cymbal.wav";
-
-	GameObject saxophone("textures/saxophone.png");
-	saxophone.m_keycode = sf::Keyboard::Space;
-	saxophone.m_soundEffect = "audio/saxophone.wav";
-
-	GameObject violin("textures/violin.png");
-	violin.m_keycode = sf::Keyboard::B;
-	violin.m_soundEffect = "audio/violin.wav";
-
-	drum.setPosition(windowWidth * 0.25f, windowHeight * 0.25f);
-	cymbal.setPosition(windowWidth * 0.75f, windowHeight * 0.25f);
-	saxophone.setPosition(windowWidth * 0.25f, windowHeight * 0.75f);
-	violin.setPosition(windowWidth * 0.75f, windowHeight * 0.75f);
-
-	app.addGameObject(&drum);
-	app.addGameObject(&cymbal);
-	app.addGameObject(&saxophone);
-	app.addGameObject(&violin);
+	app.addGameObject(&object);
 
 	app.run();
 

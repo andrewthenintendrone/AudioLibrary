@@ -16,6 +16,9 @@ public:
 	void writeEvents(const std::string& filename, bool append);
 	void readEvents(const std::string& filename);
 
+	void addRepeatingEvent(const char keyCode, const int64_t timeStamp, const int time, const int count);
+	float getRatioToNextEvent(int number, int64_t currentTime);
+
 	void averageEvents(const std::string& filename1, const std::string& filename2);
 
 	InputEvent getEvent(int number);
