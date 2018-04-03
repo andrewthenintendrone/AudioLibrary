@@ -6,7 +6,8 @@ ExampleApp::ExampleApp(const int width, const int height, const std::string& tit
 
 	if (!record)
 	{
-		m_timingData.readEvents(m_timingFile);
+		//m_timingData.readEvents(m_timingFile);
+		m_timingData.averageEvents(m_timingFile1, m_timingFile2);
 	}
 }
 
@@ -41,7 +42,7 @@ void ExampleApp::run()
 	}
 
 	// play audio
-	AudioManager::getInstance().playStream("audio/music.mp3");
+	AudioManager::getInstance().playStream("audio/music2.mp3");
 
 	// reset clock
 	m_clock = Clock();
@@ -66,7 +67,7 @@ void ExampleApp::update()
 		{
 			if (record)
 			{
-				m_timingData.writeEvents(m_timingFile);
+				m_timingData.writeEvents(m_timingFile2, false);
 			}
 			m_window->close();
 		}
@@ -76,7 +77,7 @@ void ExampleApp::update()
 			{
 				if (record)
 				{
-					m_timingData.writeEvents(m_timingFile);
+					m_timingData.writeEvents(m_timingFile2, false);
 				}
 				m_window->close();
 			}

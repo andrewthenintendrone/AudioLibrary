@@ -34,5 +34,6 @@ private:
 	int currentEvent = 0;
 	bool record = false;
 
-	std::string m_timingFile = "./timing.bin";
+	std::string m_timingFile1 = "./timing1.bin";
+	std::string m_timingFile2 = "./timing2.bin";
 };

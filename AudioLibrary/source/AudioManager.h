@@ -18,16 +18,13 @@ public:
 
 private:
 
-	// constructor
 	AudioManager();
-
-	// destructor
 	~AudioManager();
 
 	bool init();
 
 	FMOD::System* m_soundSystem = nullptr;
 
-	// list of audio with keys
+	// list of audio / key pairs
 	std::list<std::pair<FMOD::Sound*, std::string>> m_audio;
 };
