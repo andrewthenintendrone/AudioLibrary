@@ -36,3 +36,18 @@ void CircleGameObject::setScale(const float x, const float y)
 {
 	m_circle.setScale(x, y);
 }
+
+void CircleGameObject::setColor(const sf::Color& color)
+{
+	m_circle.setFillColor(color);
+}
+
+void CircleGameObject::setOutlineColor(const sf::Color& color)
+{
+	m_circle.setOutlineColor(color);
+}
+
+void CircleGameObject::setOutlineThickness(const float thickness)
+{
+	m_circle.setOutlineThickness(thickness);
+}

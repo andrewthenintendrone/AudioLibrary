@@ -15,6 +15,10 @@ public:
 	virtual void setScale(const sf::Vector2f& scale);
 	virtual void setScale(const float x, const float y);
 
+	void setColor(const sf::Color& color);
+	void setOutlineColor(const sf::Color& color);
+	void setOutlineThickness(const float thickness);
+
 private:
 
 	sf::CircleShape m_circle;

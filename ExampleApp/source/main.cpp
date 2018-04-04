@@ -9,11 +9,13 @@ int main(int argc, char* argv[])
 
 	CircleGameObject timingObject(200, sf::Color(0, 0, 0, 0));
 	timingObject.m_keycode = sf::Keyboard::Space;
+	timingObject.setOutlineThickness(2.0f);
 	timingObject.m_soundEffect = "audio/drum.wav";
 	timingObject.setPosition(windowWidth / 2, windowHeight / 2);
 
 	CircleGameObject hitObject(50, sf::Color(232, 102, 160, 255));
 	hitObject.m_keycode = sf::Keyboard::Space;
+	hitObject.setOutlineThickness(8.0f);
 	hitObject.m_soundEffect = "audio/drum.wav";
 	hitObject.setPosition(windowWidth / 2, windowHeight / 2);
 
