@@ -184,6 +184,39 @@ void TimingData::averageEvents(const std::string& filename1, const std::string& 
 	m_events = averagedEvents;
 }
 
+// returns the event that is closest in timing to the current time
+InputEvent TimingData::getClosestEvent(int64_t currentTime)
+{
+	int64_t closestTime = INT64_MAX;
+	InputEvent closestEvent;
+
+	for (auto iter = m_events.begin(); iter != m_events.end(); iter++)
+	{
+		if (std::abs((*iter).TimeStamp - currentTime) < closestTime)
+		{
+			closestTime = std::abs((*iter).TimeStamp - currentTime);
+			closestEvent = (*iter);
+		}
+	}
+
+	return closestEvent;
+}
+
+int64_t TimingData::getClosestEventOffset(int64_t currentTime)
+{
+	int64_t closestTime = INT64_MAX;
+
+	for (auto iter = m_events.begin(); iter != m_events.end(); iter++)
+	{
+		if (std::abs((*iter).TimeStamp - currentTime) < closestTime)
+		{
+			closestTime = std::abs((*iter).TimeStamp - currentTime);
+		}
+	}
+
+	return closestTime;
+}
+
 // predicate for sorting events
 bool eventSort(const InputEvent& a, const InputEvent& b)
 {

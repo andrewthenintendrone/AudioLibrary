@@ -1,10 +1,13 @@
 #include "CircleGameObject.h"
 
-CircleGameObject::CircleGameObject(const float radius, const sf::Color& color)
+CircleGameObject::CircleGameObject(const float radius, const sf::Color& color, const sf::Color& outlineColor)
 {
 	m_radius = radius;
 	m_circle.setRadius(radius);
 	m_circle.setFillColor(color);
+	m_circle.setOutlineColor(outlineColor);
+	m_circle.setOutlineThickness(1.0f);
+
 
 	m_circle.setOrigin(m_circle.getLocalBounds().left + m_circle.getLocalBounds().width / 2, m_circle.getLocalBounds().top + m_circle.getLocalBounds().height / 2);
 }

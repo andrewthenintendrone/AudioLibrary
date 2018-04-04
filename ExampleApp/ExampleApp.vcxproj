@@ -157,12 +157,14 @@
     <ClCompile Include="source\GameObject.cpp" />
     <ClCompile Include="source\main.cpp" />
     <ClCompile Include="source\SpriteGameObject.cpp" />
+    <ClCompile Include="source\TextGameObject.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\CircleGameObject.h" />
     <ClInclude Include="source\ExampleApp.h" />
     <ClInclude Include="source\GameObject.h" />
     <ClInclude Include="source\SpriteGameObject.h" />
+    <ClInclude Include="source\TextGameObject.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

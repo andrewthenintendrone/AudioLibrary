@@ -24,10 +24,13 @@
     <ClCompile Include="source\GameObject.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="source\SpriteGameObject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="source\CircleGameObject.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="source\SpriteGameObject.cpp">
+    <ClCompile Include="source\TextGameObject.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -38,10 +41,13 @@
     <ClInclude Include="source\GameObject.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="source\SpriteGameObject.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
     <ClInclude Include="source\CircleGameObject.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="source\SpriteGameObject.h">
+    <ClInclude Include="source\TextGameObject.h">
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>

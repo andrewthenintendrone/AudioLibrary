@@ -1,11 +1,11 @@
 #pragma once
 #include "GameObject.h"
 
-class CircleGameObject : public GameObject
+class TextGameObject : public GameObject
 {
 public:
 
-	CircleGameObject(const float radius = 10.0f, const sf::Color& color = sf::Color::White, const sf::Color& outlineColor = sf::Color::White);
+	TextGameObject();
 
 	virtual void draw(sf::RenderWindow* renderer);
 
@@ -15,9 +15,15 @@ public:
 	virtual void setScale(const sf::Vector2f& scale);
 	virtual void setScale(const float x, const float y);
 
+	void setFont(sf::Font* font);
+	void setColor(const sf::Color& color);
+	void setString(const std::string& string);
+
+
 private:
 
-	sf::CircleShape m_circle;
+	void setOrigin();
 
-	float m_radius;
+	sf::Font* m_font;
+	sf::Text m_text;
 };

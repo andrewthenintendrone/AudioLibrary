@@ -7,6 +7,9 @@
 #include <list>
 #include "GameObject.h"
 #include "CircleGameObject.h"
+#include "TextGameObject.h"
+
+enum SUCCESSSTATE { NONE, BAD, GOOD, PERFECT };
 
 class ExampleApp
 {
@@ -25,15 +28,22 @@ private:
 	void update();
 	void draw();
 
+	void updateScore();
+
 	sf::RenderWindow* m_window;
 
 	std::list<GameObject*> m_gameObjects;
+
+	sf::Font m_font;
+	TextGameObject m_errorText;
 
 	TimingData m_timingData;
 	Clock m_clock;
 
 	int currentEvent = 0;
 	bool record = false;
+
+	SUCCESSSTATE m_currentSuccessState = NONE;
 
 	std::string m_timingFile = "./timing.bin";
 };

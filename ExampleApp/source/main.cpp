@@ -7,12 +7,18 @@ int main(int argc, char* argv[])
 {
 	ExampleApp app(windowWidth, windowHeight, "Audio Library Example");
 
-	CircleGameObject object(200, sf::Color(232, 102, 160, 255));
-	object.m_keycode = sf::Keyboard::Space;
-	object.m_soundEffect = "audio/drum.wav";
-	object.setPosition(windowWidth / 2, windowHeight / 2);
+	CircleGameObject timingObject(200, sf::Color(0, 0, 0, 0));
+	timingObject.m_keycode = sf::Keyboard::Space;
+	timingObject.m_soundEffect = "audio/drum.wav";
+	timingObject.setPosition(windowWidth / 2, windowHeight / 2);
 
-	app.addGameObject(&object);
+	CircleGameObject hitObject(50, sf::Color(232, 102, 160, 255));
+	hitObject.m_keycode = sf::Keyboard::Space;
+	hitObject.m_soundEffect = "audio/drum.wav";
+	hitObject.setPosition(windowWidth / 2, windowHeight / 2);
+
+	app.addGameObject(&timingObject);
+	app.addGameObject(&hitObject);
 
 	app.run();
 

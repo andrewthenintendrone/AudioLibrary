@@ -5,6 +5,10 @@ ExampleApp::ExampleApp(const int width, const int height, const std::string& tit
 {
 	m_window = new sf::RenderWindow(sf::VideoMode(width, height), title);
 
+	m_font.loadFromFile("fonts/Roboto-Regular.ttf");
+	m_errorText.setFont(&m_font);
+	m_errorText.setPosition(width / 4, height / 4);
+
 	if (record)
 	{
 		m_timingData.addRepeatingEvent(sf::Keyboard::Space, 0, 368, 300);
@@ -96,6 +100,8 @@ void ExampleApp::update()
 						m_timingData.addEvent((char)event.key.code, m_clock.getTimeMilliseconds());
 						(*iter)->playSound();
 					}
+
+					updateScore();
 				}
 			}
 		}
@@ -112,7 +118,7 @@ void ExampleApp::update()
 		if (currentEvent < m_timingData.getNumEvents())
 		{
 			float ratio = m_timingData.getRatioToNextEvent(currentEvent, m_clock.getTimeMilliseconds());
-			m_gameObjects.front()->setScale(ratio, ratio);
+			m_gameObjects.front()->setScale(1.25f - ratio, 1.25f - ratio);
 
 			if (m_clock.getTimeMilliseconds() > m_timingData.getEvent(currentEvent).TimeStamp)
 			{
@@ -141,5 +147,36 @@ void ExampleApp::draw()
 		(*iter)->draw(m_window);
 	}
 
+	m_errorText.draw(m_window);
+
 	m_window->display();
+}
+
+// update the score
+void ExampleApp::updateScore()
+{
+	// how far off the event are we
+	int64_t playerError = m_timingData.getClosestEventOffset(m_clock.getTimeMilliseconds());
+
+	int perfectCutoff = 30;
+	int goodCutoff = 100;
+
+	if (playerError < perfectCutoff)
+	{
+		m_currentSuccessState = PERFECT;
+		m_errorText.setColor(sf::Color::Blue);
+		m_errorText.setString("PERFECT");
+	}
+	else if (playerError < goodCutoff)
+	{
+		m_currentSuccessState = GOOD;
+		m_errorText.setColor(sf::Color::Green);
+		m_errorText.setString("GOOD");
+	}
+	else
+	{
+		m_currentSuccessState = BAD;
+		m_errorText.setColor(sf::Color::Red);
+		m_errorText.setString("BAD");
+	}
 }

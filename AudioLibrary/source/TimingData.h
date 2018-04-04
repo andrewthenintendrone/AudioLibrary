@@ -21,6 +21,9 @@ public:
 
 	void averageEvents(const std::string& filename1, const std::string& filename2);
 
+	InputEvent getClosestEvent(int64_t currentTime);
+	int64_t getClosestEventOffset(int64_t currentTime);
+
 	InputEvent getEvent(int number);
 	size_t getNumEvents();
 
