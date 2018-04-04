@@ -7,6 +7,8 @@ public:
 
 	TextGameObject();
 
+	void update(float dt);
+
 	virtual void draw(sf::RenderWindow* renderer);
 
 	virtual void setPosition(const sf::Vector2f& position);

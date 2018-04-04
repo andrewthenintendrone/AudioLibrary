@@ -28,7 +28,7 @@ private:
 	void update();
 	void draw();
 
-	void updateScore();
+	void updateText(char currentKeyCode);
 
 	sf::RenderWindow* m_window;
 

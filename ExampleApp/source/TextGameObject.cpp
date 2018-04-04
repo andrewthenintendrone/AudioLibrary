@@ -5,6 +5,11 @@ TextGameObject::TextGameObject()
 	
 }
 
+void TextGameObject::update(float dt)
+{
+	m_text.setPosition(m_text.getPosition() + sf::Vector2f(0, -100.0f * dt));
+}
+
 void TextGameObject::draw(sf::RenderWindow* renderer)
 {
 	setOrigin();

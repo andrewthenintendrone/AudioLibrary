@@ -119,48 +119,35 @@ float TimingData::getRatioToNextEvent(int number, int64_t currentTime)
 	return (float)(timeSinceEvent) / (float)(timeBetweenEvents);
 }
 
-// averages the timings of 2 files
-void TimingData::averageEvents(const std::string& filename1, const std::string& filename2)
+// averages the timings of files
+void TimingData::averageEvents(std::list<std::string> filenames)
 {
-	std::ifstream file(filename1, std::ios::_Nocreate | std::ios::binary);
-
-	if (!file.is_open())
+	for (auto iter = filenames.begin(); iter != filenames.end(); iter++)
 	{
-		std::cout << "Failed to open " << filename1.c_str() << " for reading. Does it exist?\n";
-		return;
+		std::ifstream file(*iter, std::ios::_Nocreate | std::ios::binary | std::ios::ate);
+
+		if (!file.is_open())
+		{
+			std::cout << "Failed to open " << *iter->c_str() << " for reading. Does it exist?\n";
+			return;
+		}
+
+		int numEvents = file.tellg() / (sizeof(char) + sizeof(int64_t));
+
+		file.seekg(0, std::ios::beg);
+
+		for(int i = 0; i < numEvents; i++)
+		{
+			InputEvent currentEvent;
+
+			file.read(reinterpret_cast<char*>(&currentEvent.KeyCode), sizeof(char));
+			file.read(reinterpret_cast<char*>(&currentEvent.TimeStamp), sizeof(int64_t));
+
+			m_events.push_back(currentEvent);
+		}
+
+		file.close();
 	}
-
-	while (!file.eof())
-	{
-		InputEvent currentEvent;
-
-		file.read(reinterpret_cast<char*>(&currentEvent.KeyCode), sizeof(char));
-		file.read(reinterpret_cast<char*>(&currentEvent.TimeStamp), sizeof(int64_t));
-
-		m_events.push_back(currentEvent);
-	}
-
-	file.close();
-
-	file.open(filename2, std::ios::_Nocreate | std::ios::binary);
-
-	if (!file.is_open())
-	{
-		std::cout << "Failed to open " << filename2.c_str() << " for reading. Does it exist?\n";
-		return;
-	}
-
-	while (!file.eof())
-	{
-		InputEvent currentEvent;
-
-		file.read(reinterpret_cast<char*>(&currentEvent.KeyCode), sizeof(char));
-		file.read(reinterpret_cast<char*>(&currentEvent.TimeStamp), sizeof(int64_t));
-
-		m_events.push_back(currentEvent);
-	}
-
-	file.close();
 
 	// order the read events
 	orderEvents();
@@ -172,11 +159,13 @@ void TimingData::averageEvents(const std::string& filename1, const std::string& 
 	{
 		InputEvent currentEvent = *iter;
 
-		iter++;
+		for (int i = 0; i < filenames.size() - 1; i++)
+		{
+			iter++;
+			currentEvent.TimeStamp += iter->TimeStamp;
+		}
 
-		currentEvent.TimeStamp += iter->TimeStamp;
-
-		currentEvent.TimeStamp /= 2;
+		currentEvent.TimeStamp /= filenames.size();
 
 		averagedEvents.push_back(currentEvent);
 	}

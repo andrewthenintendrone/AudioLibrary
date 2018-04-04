@@ -19,7 +19,7 @@ public:
 	void addRepeatingEvent(const char keyCode, const int64_t timeStamp, const int time, const int count);
 	float getRatioToNextEvent(int number, int64_t currentTime);
 
-	void averageEvents(const std::string& filename1, const std::string& filename2);
+	void averageEvents(std::list<std::string> filenames);
 
 	InputEvent getClosestEvent(int64_t currentTime);
 	int64_t getClosestEventOffset(int64_t currentTime);

@@ -11,9 +11,8 @@ ExampleApp::ExampleApp(const int width, const int height, const std::string& tit
 
 	if (record)
 	{
-		m_timingData.addRepeatingEvent(sf::Keyboard::Space, 0, 368, 300);
+		//m_timingData.addRepeatingEvent(sf::Keyboard::Space, 0, 368, 300);
 	}
-
 	else
 	{
 		m_timingData.readEvents(m_timingFile);
@@ -51,7 +50,7 @@ void ExampleApp::run()
 	}
 
 	// play audio
-	AudioManager::getInstance().playStream("audio/lockstep.mp3");
+	AudioManager::getInstance().playStream("audio/music.mp3");
 
 	// reset clock
 	m_clock = Clock();
@@ -96,12 +95,13 @@ void ExampleApp::update()
 				{
 					if ((char)event.key.code == (*iter)->m_keycode && record)
 					{
+						std::cout << (int)event.key.code << std::endl;
 						(*iter)->m_hitTimer = 0.25f;
 						m_timingData.addEvent((char)event.key.code, m_clock.getTimeMilliseconds());
 						(*iter)->playSound();
 					}
 
-					updateScore();
+					updateText(event.key.code);
 				}
 			}
 		}
@@ -118,7 +118,9 @@ void ExampleApp::update()
 		if (currentEvent < m_timingData.getNumEvents())
 		{
 			float ratio = m_timingData.getRatioToNextEvent(currentEvent, m_clock.getTimeMilliseconds());
-			m_gameObjects.front()->setScale(1.25f - ratio, 1.25f - ratio);
+			float winY = m_window->getSize().y;
+			float ypos = ratio * (winY / 2);
+			m_gameObjects.front()->setPosition(m_window->getSize().x / 2, m_window->getSize().y - ypos);
 
 			if (m_clock.getTimeMilliseconds() > m_timingData.getEvent(currentEvent).TimeStamp)
 			{
@@ -134,6 +136,8 @@ void ExampleApp::update()
 			}
 		}
 	}
+
+	m_errorText.update(m_clock.getDeltaTime());
 
 	AudioManager::getInstance().update();
 }
@@ -153,26 +157,42 @@ void ExampleApp::draw()
 }
 
 // update the score
-void ExampleApp::updateScore()
+void ExampleApp::updateText(char currentKeyCode)
 {
 	// how far off the event are we
-	int64_t playerError = m_timingData.getClosestEventOffset(m_clock.getTimeMilliseconds());
+	InputEvent closestEvent = m_timingData.getClosestEvent(m_clock.getTimeMilliseconds());
 
-	int perfectCutoff = 30;
-	int goodCutoff = 100;
+	int64_t playerError = std::abs(closestEvent.TimeStamp - m_clock.getTimeMilliseconds());
 
-	if (playerError < perfectCutoff)
+	int perfectCutoff = 15;
+	int goodCutoff = 60;
+
+	sf::Vector2u windowSize = m_window->getSize();
+	m_errorText.setPosition(windowSize.x / 2, windowSize.y / 4);
+
+	// the right key was pressed
+	if (currentKeyCode == closestEvent.KeyCode)
 	{
-		m_currentSuccessState = PERFECT;
-		m_errorText.setColor(sf::Color::Blue);
-		m_errorText.setString("PERFECT");
+		if (playerError < perfectCutoff)
+		{
+			m_currentSuccessState = PERFECT;
+			m_errorText.setColor(sf::Color::Blue);
+			m_errorText.setString("PERFECT!");
+		}
+		else if (playerError < goodCutoff)
+		{
+			m_currentSuccessState = GOOD;
+			m_errorText.setColor(sf::Color::Green);
+			m_errorText.setString("GOOD");
+		}
+		else
+		{
+			m_currentSuccessState = BAD;
+			m_errorText.setColor(sf::Color::Red);
+			m_errorText.setString("BAD...");
+		}
 	}
-	else if (playerError < goodCutoff)
-	{
-		m_currentSuccessState = GOOD;
-		m_errorText.setColor(sf::Color::Green);
-		m_errorText.setString("GOOD");
-	}
+	// the wrong key was pressed
 	else
 	{
 		m_currentSuccessState = BAD;
