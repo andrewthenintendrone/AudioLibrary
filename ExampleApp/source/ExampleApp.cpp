@@ -11,11 +11,16 @@ ExampleApp::ExampleApp(const int width, const int height, const std::string& tit
 
 	if (record)
 	{
-		//m_timingData.addRepeatingEvent(sf::Keyboard::Space, 0, 368, 300);
+		
 	}
 	else
 	{
-		m_timingData.readEvents(m_timingFile);
+		std::list<std::string> filenames;
+		filenames.push_back("timing1.bin");
+		filenames.push_back("timing2.bin");
+		m_timingData.averageEvents(filenames);
+
+		//m_timingData.readEvents(m_timingFile);
 	}
 }
 
@@ -117,7 +122,7 @@ void ExampleApp::update()
 	{
 		if (currentEvent < m_timingData.getNumEvents())
 		{
-			float ratio = m_timingData.getRatioToNextEvent(currentEvent, m_clock.getTimeMilliseconds());
+			float ratio = m_timingData.getRatioToNextEvent(m_clock.getTimeMilliseconds());
 			float winY = m_window->getSize().y;
 			float ypos = ratio * (winY / 2);
 			m_gameObjects.front()->setPosition(m_window->getSize().x / 2, m_window->getSize().y - ypos);
