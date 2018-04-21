@@ -19,7 +19,7 @@ public:
 	void readEventsText(const std::string& filename);
 
 	void addRepeatingEvent(const char keyCode, const int64_t timeStamp, const int time, const int count);
-	float getRatioToNextEvent(int number, int64_t currentTime);
+	float getRatioToNextEvent(int64_t currentTime);
 
 	void averageEvents(std::list<std::string> filenames);
 	void averageEventsText(std::list<std::string> filenames);

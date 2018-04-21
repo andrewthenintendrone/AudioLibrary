@@ -159,12 +159,34 @@ void TimingData::addRepeatingEvent(const char keyCode, const int64_t timeStamp, 
 	orderEvents();
 }
 
-float TimingData::getRatioToNextEvent(int number, int64_t currentTime)
+// 
+float TimingData::getRatioToNextEvent(int64_t currentTime)
 {
+	// no events have happened yet
+	if (currentTime <= m_events.front().TimeStamp)
+	{
+		return (float)(currentTime) / (float)m_events.front().TimeStamp;
+	}
+
+	// all events have finished
+	if (currentTime >= m_events.back().TimeStamp)
+	{
+		return 1.0f;
+	}
+
 	InputEvent currentEvent;
 	InputEvent nextEvent;
 
-	if (number == 0)
+	for (auto iter = m_events.begin(); iter != m_events.end(); iter++)
+	{
+		if (currentTime >= iter->TimeStamp)
+		{
+			currentEvent = *iter;
+			nextEvent = *std::next(iter);
+		}
+	}
+
+	/*if (number == 0)
 	{
 		currentEvent = InputEvent{ m_events.front().KeyCode, 0 };
 		nextEvent = m_events.front();
@@ -173,13 +195,15 @@ float TimingData::getRatioToNextEvent(int number, int64_t currentTime)
 	{
 		currentEvent = getEvent(number - 1);
 		nextEvent = getEvent(number);
-	}
+	}*/
 
 	int64_t timeSinceEvent = currentTime - currentEvent.TimeStamp;
 	int64_t timeBetweenEvents = nextEvent.TimeStamp - currentEvent.TimeStamp;
 
+	// events are simultaneous
 	if (timeBetweenEvents == 0)
 	{
+		// (avoid divide by 0)
 		return 1.0f;
 	}
 
@@ -315,6 +339,7 @@ InputEvent TimingData::getClosestEvent(int64_t currentTime)
 	return closestEvent;
 }
 
+// returns the time difference between the closest event to now and now
 int64_t TimingData::getClosestEventOffset(int64_t currentTime)
 {
 	int64_t closestTime = INT64_MAX;
@@ -336,12 +361,13 @@ bool eventSort(const InputEvent& a, const InputEvent& b)
 	return (a.TimeStamp < b.TimeStamp);
 }
 
-// make sure all events are in order
+// sorts events in chronological order
 void TimingData::orderEvents()
 {
 	m_events.sort(eventSort);
 }
 
+// get an event by number
 InputEvent TimingData::getEvent(int number)
 {
 	if (number < m_events.size())
@@ -352,6 +378,7 @@ InputEvent TimingData::getEvent(int number)
 	return m_events.back();
 }
 
+// returns the number of events
 size_t TimingData::getNumEvents()
 {
 	return m_events.size();
