@@ -46,6 +46,39 @@ void TimingData::writeEvents(const std::string& filename, bool append)
 	file.close();
 }
 
+void TimingData::writeEventsText(const std::string& filename, bool append)
+{
+	std::ofstream file;
+
+	if (append)
+	{
+		file.open(filename, std::ios::app);
+	}
+	else
+	{
+		file.open(filename, std::ios::trunc);
+	}
+
+	if (!file.is_open())
+	{
+		std::cout << "Failed to open " << filename.c_str() << " for writing. Is it being used by another process?\n";
+		return;
+	}
+
+	for (auto iter = m_events.begin(); iter != m_events.end(); iter++)
+	{
+		file << (int)iter->KeyCode << " ";
+		file << iter->TimeStamp;
+
+		if (std::next(iter) != m_events.end())
+		{
+			file << std::endl;
+		}
+	}
+
+	file.close();
+}
+
 void TimingData::readEvents(const std::string& filename)
 {
 	std::ifstream file(filename, std::ios::_Nocreate | std::ios::binary | std::ios::ate);
@@ -66,6 +99,40 @@ void TimingData::readEvents(const std::string& filename)
 
 		file.read(reinterpret_cast<char*>(&currentEvent.KeyCode), sizeof(char));
 		file.read(reinterpret_cast<char*>(&currentEvent.TimeStamp), sizeof(int64_t));
+
+		m_events.push_back(currentEvent);
+	}
+
+	file.close();
+
+	// order the read events
+	orderEvents();
+}
+
+void TimingData::readEventsText(const std::string& filename)
+{
+	std::ifstream file(filename, std::ios::_Nocreate);
+
+	if (!file.is_open())
+	{
+		std::cout << "Failed to open " << filename.c_str() << " for reading. Does it exist?\n";
+		return;
+	}
+
+	while (!file.eof())
+	{
+		InputEvent currentEvent;
+
+		int keyCode;
+		int64_t timeStamp;
+
+		file >> std::dec >> keyCode;
+		file >> timeStamp;
+
+		currentEvent.KeyCode = (char)keyCode;
+		currentEvent.TimeStamp = timeStamp;
+		/*file.read(reinterpret_cast<char*>(&currentEvent.KeyCode), sizeof(char));
+		file.read(reinterpret_cast<char*>(&currentEvent.TimeStamp), sizeof(int64_t));*/
 
 		m_events.push_back(currentEvent);
 	}
@@ -142,6 +209,63 @@ void TimingData::averageEvents(std::list<std::string> filenames)
 
 			file.read(reinterpret_cast<char*>(&currentEvent.KeyCode), sizeof(char));
 			file.read(reinterpret_cast<char*>(&currentEvent.TimeStamp), sizeof(int64_t));
+
+			m_events.push_back(currentEvent);
+		}
+
+		file.close();
+	}
+
+	// order the read events
+	orderEvents();
+
+	// iterate through events and average them
+	std::list<InputEvent> averagedEvents;
+
+	for (auto iter = m_events.begin(); iter != m_events.end(); iter++)
+	{
+		InputEvent currentEvent = *iter;
+
+		for (int i = 0; i < filenames.size() - 1; i++)
+		{
+			iter++;
+			currentEvent.TimeStamp += iter->TimeStamp;
+		}
+
+		currentEvent.TimeStamp /= filenames.size();
+
+		averagedEvents.push_back(currentEvent);
+	}
+
+	m_events = averagedEvents;
+}
+
+void TimingData::averageEventsText(std::list<std::string> filenames)
+{
+	for (auto iter = filenames.begin(); iter != filenames.end(); iter++)
+	{
+		std::ifstream file(*iter, std::ios::_Nocreate);
+
+		if (!file.is_open())
+		{
+			std::cout << "Failed to open " << *iter->c_str() << " for reading. Does it exist?\n";
+			return;
+		}
+
+		while(!file.eof())
+		{
+			InputEvent currentEvent;
+
+			int keyCode;
+			int64_t timeStamp;
+
+			file >> std::dec >> keyCode;
+			file >> timeStamp;
+
+			currentEvent.KeyCode = (char)keyCode;
+			currentEvent.TimeStamp = timeStamp;
+			/*file.read(reinterpret_cast<char*>(&currentEvent.KeyCode), sizeof(char));
+			file.read(reinterpret_cast<char*>(&currentEvent.TimeStamp), sizeof(int64_t));*/
 
 			m_events.push_back(currentEvent);
 		}

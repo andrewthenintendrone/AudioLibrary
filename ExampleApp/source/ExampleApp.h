@@ -45,5 +45,5 @@ private:
 
 	SUCCESSSTATE m_currentSuccessState = NONE;
 
-	std::string m_timingFile = "./timing.bin";
+	std::string m_timingFile = "./timing1.txt";
 };

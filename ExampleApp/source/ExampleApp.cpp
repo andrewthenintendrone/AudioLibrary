@@ -11,11 +11,14 @@ ExampleApp::ExampleApp(const int width, const int height, const std::string& tit
 
 	if (record)
 	{
-		//m_timingData.addRepeatingEvent(sf::Keyboard::Space, 0, 368, 300);
+		
 	}
 	else
 	{
-		m_timingData.readEvents(m_timingFile);
+		std::list<std::string> filenames;
+		filenames.push_back("./timing.txt");
+		filenames.push_back("./timing1.txt");
+		m_timingData.averageEventsText(filenames);
 	}
 }
 
@@ -75,7 +78,7 @@ void ExampleApp::update()
 		{
 			if (record)
 			{
-				m_timingData.writeEvents(m_timingFile, false);
+				m_timingData.writeEventsText(m_timingFile, false);
 			}
 			m_window->close();
 		}
@@ -85,7 +88,7 @@ void ExampleApp::update()
 			{
 				if (record)
 				{
-					m_timingData.writeEvents(m_timingFile, false);
+					m_timingData.writeEventsText(m_timingFile, false);
 				}
 				m_window->close();
 			}
@@ -118,9 +121,10 @@ void ExampleApp::update()
 		if (currentEvent < m_timingData.getNumEvents())
 		{
 			float ratio = m_timingData.getRatioToNextEvent(currentEvent, m_clock.getTimeMilliseconds());
-			float winY = m_window->getSize().y;
-			float ypos = ratio * (winY / 2);
-			m_gameObjects.front()->setPosition(m_window->getSize().x / 2, m_window->getSize().y - ypos);
+			ratio = std::pow(ratio, 1.5f);
+			float winY = m_window->getSize().y + 60;
+			float ypos = ratio * ((winY + 60) / 2);
+			m_gameObjects.front()->setPosition(m_window->getSize().x / 2, m_window->getSize().y + 60 - ypos);
 
 			if (m_clock.getTimeMilliseconds() > m_timingData.getEvent(currentEvent).TimeStamp)
 			{
