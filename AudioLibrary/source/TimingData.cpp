@@ -245,7 +245,7 @@ void TimingData::readAverageEvents(std::list<std::string> filenames)
 	{
 		InputEvent currentEvent = *iter;
 
-		for (int i = 0; i < filenames.size() - 1; i++)
+		for (size_t i = 0; i < filenames.size() - 1; i++)
 		{
 			iter++;
 			currentEvent.TimeStamp += iter->TimeStamp;
@@ -302,7 +302,7 @@ void TimingData::deserializeAverageEvents(std::list<std::string> filenames)
 	{
 		InputEvent currentEvent = *iter;
 
-		for (int i = 0; i < filenames.size() - 1; i++)
+		for (size_t i = 0; i < filenames.size() - 1; i++)
 		{
 			iter++;
 			currentEvent.TimeStamp += iter->TimeStamp;
@@ -363,7 +363,7 @@ void TimingData::orderEvents()
 }
 
 // get an event by number
-InputEvent TimingData::getEvent(int number)
+InputEvent TimingData::getEvent(unsigned int number)
 {
 	if (number < m_events.size())
 	{

@@ -25,7 +25,7 @@ public:
 	InputEvent getClosestEvent(int64_t currentTime);
 	int64_t getClosestEventOffset(int64_t currentTime);
 
-	InputEvent getEvent(int number);
+	InputEvent getEvent(unsigned int number);
 	size_t getNumEvents();
 
 private:

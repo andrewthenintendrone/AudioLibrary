@@ -40,7 +40,7 @@ private:
 	TimingData m_timingData;
 	Clock m_clock;
 
-	int currentEvent = 0;
+	unsigned int currentEvent = 0;
 	bool record = false;
 
 	SUCCESSSTATE m_currentSuccessState = NONE;
