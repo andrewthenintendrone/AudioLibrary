@@ -7,7 +7,7 @@ ExampleApp::ExampleApp(const int width, const int height, const std::string& tit
 
 	m_font.loadFromFile("fonts/Roboto-Regular.ttf");
 	m_errorText.setFont(&m_font);
-	m_errorText.setPosition(width / 4, height / 4);
+	m_errorText.setPosition(width / 4.0f, height / 4.0f);
 
 	if (record)
 	{
@@ -125,9 +125,9 @@ void ExampleApp::update()
 		{
 			float ratio = m_timingData.getRatioToNextEvent(m_clock.getTimeMilliseconds());
 			ratio = std::pow(ratio, 2.0f);
-			float winY = m_window->getSize().y + 60;
-			float ypos = ratio * ((winY + 60) / 2);
-			m_gameObjects.front()->setPosition(m_window->getSize().x / 2, m_window->getSize().y + 60 - ypos);
+			float winY = m_window->getSize().y + 60.0f;
+			float ypos = ratio * ((winY + 60.0f) / 2.0f);
+			m_gameObjects.front()->setPosition(m_window->getSize().x / 2.0f, m_window->getSize().y + 60.0f - ypos);
 
 			if (m_clock.getTimeMilliseconds() > m_timingData.getEvent(currentEvent).TimeStamp)
 			{
@@ -175,7 +175,7 @@ void ExampleApp::updateText(char currentKeyCode)
 	int goodCutoff = 60;
 
 	sf::Vector2u windowSize = m_window->getSize();
-	m_errorText.setPosition(windowSize.x / 2, windowSize.y / 4);
+	m_errorText.setPosition(windowSize.x / 2.0f, windowSize.y / 4.0f);
 
 	// the right key was pressed
 	if (currentKeyCode == closestEvent.KeyCode)

@@ -84,7 +84,7 @@ void TimingData::readEvents(const std::string& filename)
 		return;
 	}
 
-	int numEvents = file.tellg() / (sizeof(char) + sizeof(int64_t));
+	int64_t numEvents = (int64_t)file.tellg() / (sizeof(char) + sizeof(int64_t));
 
 	file.seekg(0, std::ios::beg);
 
@@ -218,7 +218,7 @@ void TimingData::readAverageEvents(std::list<std::string> filenames)
 			return;
 		}
 
-		int numEvents = file.tellg() / (sizeof(char) + sizeof(int64_t));
+		int64_t numEvents = (int64_t)file.tellg() / (sizeof(char) + sizeof(int64_t));
 
 		file.seekg(0, std::ios::beg);
 
