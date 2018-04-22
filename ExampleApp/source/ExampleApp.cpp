@@ -16,9 +16,12 @@ ExampleApp::ExampleApp(const int width, const int height, const std::string& tit
 	else
 	{
 		std::list<std::string> filenames;
-		filenames.push_back("./timing.txt");
 		filenames.push_back("./timing1.txt");
-		m_timingData.averageEventsText(filenames);
+		filenames.push_back("./timing2.txt");
+		filenames.push_back("./timing3.txt");
+		filenames.push_back("./timing4.txt");
+		filenames.push_back("./timing5.txt");
+		m_timingData.deserializeAverageEvents(filenames);
 	}
 }
 
@@ -78,7 +81,7 @@ void ExampleApp::update()
 		{
 			if (record)
 			{
-				m_timingData.writeEventsText(m_timingFile, false);
+				m_timingData.serializeEvents(m_timingFile, false);
 			}
 			m_window->close();
 		}
@@ -88,7 +91,7 @@ void ExampleApp::update()
 			{
 				if (record)
 				{
-					m_timingData.writeEventsText(m_timingFile, false);
+					m_timingData.serializeEvents(m_timingFile, false);
 				}
 				m_window->close();
 			}
@@ -120,8 +123,8 @@ void ExampleApp::update()
 	{
 		if (currentEvent < m_timingData.getNumEvents())
 		{
-			float ratio = m_timingData.getRatioToNextEvent(currentEvent, m_clock.getTimeMilliseconds());
-			ratio = std::pow(ratio, 1.5f);
+			float ratio = m_timingData.getRatioToNextEvent(m_clock.getTimeMilliseconds());
+			ratio = std::pow(ratio, 2.0f);
 			float winY = m_window->getSize().y + 60;
 			float ypos = ratio * ((winY + 60) / 2);
 			m_gameObjects.front()->setPosition(m_window->getSize().x / 2, m_window->getSize().y + 60 - ypos);

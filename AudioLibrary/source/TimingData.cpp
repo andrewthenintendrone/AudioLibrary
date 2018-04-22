@@ -3,11 +3,6 @@
 #include <iostream>
 #include <algorithm>
 
-TimingData::TimingData()
-{
-	
-}
-
 void TimingData::addEvent(const InputEvent& event)
 {
 	m_events.push_back(event);
@@ -46,7 +41,7 @@ void TimingData::writeEvents(const std::string& filename, bool append)
 	file.close();
 }
 
-void TimingData::writeEventsText(const std::string& filename, bool append)
+void TimingData::serializeEvents(const std::string& filename, bool append)
 {
 	std::ofstream file;
 
@@ -109,7 +104,7 @@ void TimingData::readEvents(const std::string& filename)
 	orderEvents();
 }
 
-void TimingData::readEventsText(const std::string& filename)
+void TimingData::deserializeEvents(const std::string& filename)
 {
 	std::ifstream file(filename, std::ios::_Nocreate);
 
@@ -211,7 +206,7 @@ float TimingData::getRatioToNextEvent(int64_t currentTime)
 }
 
 // averages the timings of files
-void TimingData::averageEvents(std::list<std::string> filenames)
+void TimingData::readAverageEvents(std::list<std::string> filenames)
 {
 	for (auto iter = filenames.begin(); iter != filenames.end(); iter++)
 	{
@@ -264,7 +259,7 @@ void TimingData::averageEvents(std::list<std::string> filenames)
 	m_events = averagedEvents;
 }
 
-void TimingData::averageEventsText(std::list<std::string> filenames)
+void TimingData::deserializeAverageEvents(std::list<std::string> filenames)
 {
 	for (auto iter = filenames.begin(); iter != filenames.end(); iter++)
 	{
