@@ -50,7 +50,7 @@ void ExampleApp::removeGameObject(GameObject* gameobject)
 void ExampleApp::run()
 {
 	// preload audio assets
-	for (auto iter = m_gameObjects.begin(); iter != m_gameObjects.end(); iter ++)
+	for (auto iter = m_gameObjects.begin(); iter != m_gameObjects.end(); iter++)
 	{
 		AudioManager::getInstance().preloadAudio((*iter)->m_soundEffect);
 	}
@@ -102,7 +102,6 @@ void ExampleApp::update()
 					if ((char)event.key.code == (*iter)->m_keycode && record)
 					{
 						std::cout << (int)event.key.code << std::endl;
-						(*iter)->m_hitTimer = 0.25f;
 						m_timingData.addEvent((char)event.key.code, m_clock.getTimeMilliseconds());
 						(*iter)->playSound();
 					}
@@ -111,12 +110,6 @@ void ExampleApp::update()
 				}
 			}
 		}
-	}
-
-	// update gameobjects
-	for (auto iter = m_gameObjects.begin(); iter != m_gameObjects.end(); iter++)
-	{
-		(*iter)->update(m_clock.getDeltaTime());
 	}
 
 	if (!record)
@@ -136,7 +129,6 @@ void ExampleApp::update()
 					if (m_timingData.getEvent(currentEvent).KeyCode == (*iter)->m_keycode)
 					{
 						(*iter)->playSound();
-						(*iter)->m_hitTimer = 0.25f;
 					}
 				}
 				currentEvent++;
